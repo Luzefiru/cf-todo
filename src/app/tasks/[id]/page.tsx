@@ -12,11 +12,12 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   const { task }: { task: Task } = await response.json();
+  const updateTaskWithId = updateTask.bind(null, Number(task.id));
 
   return (
     <div className="flex justify-center w-full">
       <div className="flex justify-center w-full px-2 sm:px-4 md:w-3/4">
-        <form action={updateTask} className="w-full lg:w-3/4">
+        <form action={updateTaskWithId} className="w-full lg:w-3/4">
           <label
             htmlFor="title"
             className="block p-2 text-sm font-medium text-gray-700"
@@ -25,6 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </label>
           <input
             id="title"
+            name="title"
             className="w-full p-2 mb-4 text-2xl font-bold text-gray-900 border border-gray-200 rounded-lg shadow-sm sm:text-3xl"
             defaultValue={task.title}
           />
@@ -39,6 +41,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
             <textarea
               id="description"
+              name="description"
               className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
               rows={4}
               defaultValue={task.description}
@@ -55,6 +58,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </label>
 
               <select
+                name="status"
                 id="status"
                 className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
               >
@@ -79,6 +83,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </label>
 
               <input
+                name="due_date"
                 id="due_date"
                 className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
                 defaultValue={task.due_date}
