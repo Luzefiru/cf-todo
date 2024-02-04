@@ -40,9 +40,21 @@ export default async function Table() {
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {tasks.map((t) => (
-              <TableRow {...t} key={t.id} />
-            ))}
+            {tasks
+              .sort((a, b) => {
+                if (a.due_date > b.due_date) {
+                  return 1;
+                }
+
+                if (a.due_date < b.due_date) {
+                  return -1;
+                }
+
+                return 0;
+              })
+              .map((t) => (
+                <TableRow {...t} key={t.id} />
+              ))}
           </tbody>
         </table>
       </div>
