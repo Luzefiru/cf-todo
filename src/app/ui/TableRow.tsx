@@ -1,9 +1,12 @@
+import TableRowButtons from './TableRowButtons';
+
 export default function TableRow({
+  id,
   title,
   description,
   completed,
   due_date,
-}: Omit<Task, 'id'>) {
+}: Task) {
   return (
     <tr>
       <td className="px-4 py-2 font-medium text-gray-900 truncate whitespace-nowrap max-w-[14ch]">
@@ -19,12 +22,7 @@ export default function TableRow({
         {new Date(due_date).toISOString().split('T')[0].replaceAll('-', '/')}
       </td>
       <td className="px-4 py-2 text-center whitespace-nowrap">
-        <a
-          href="#"
-          className="inline-block px-4 py-2 text-xs font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700"
-        >
-          View
-        </a>
+        <TableRowButtons id={id} />
       </td>
     </tr>
   );
