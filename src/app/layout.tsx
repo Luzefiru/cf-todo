@@ -33,12 +33,12 @@ export default function RootLayout({
               </div>
 
               <div className="flex flex-col gap-4 mt-4 sm:mt-0 sm:flex-row sm:items-center">
-                <button
+                <Link
                   className="block px-5 py-3 text-sm font-medium text-white transition bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring"
-                  type="button"
+                  href="/tasks/create"
                 >
                   Create Task
-                </button>
+                </Link>
               </div>
             </div>
           </div>

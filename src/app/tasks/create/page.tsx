@@ -1,23 +1,12 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { updateTask } from '@/app/lib/actions';
+import { createTask } from '@/app/lib/actions';
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const response = await fetch(`http://localhost:3000/api/tasks/${params.id}`, {
-    cache: 'no-store',
-  });
-
-  if (response.status === 404) {
-    notFound();
-  }
-
-  const { task }: { task: Task } = await response.json();
-  const updateTaskWithId = updateTask.bind(null, Number(task.id));
-
+export default async function Page() {
   return (
     <div className="flex justify-center w-full">
       <div className="flex justify-center w-full px-2 sm:px-4 md:w-3/4">
-        <form action={updateTaskWithId} className="w-full lg:w-3/4">
+        <form action={createTask} className="w-full lg:w-3/4">
           <label
             htmlFor="title"
             className="block p-2 text-sm font-medium text-gray-700"
@@ -28,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             id="title"
             name="title"
             className="w-full p-2 mb-4 text-2xl font-bold text-gray-900 border border-gray-200 rounded-lg shadow-sm sm:text-3xl"
-            defaultValue={task.title}
+            placeholder="An interesting task title"
             required
           />
 
@@ -45,7 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               name="description"
               className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
               rows={4}
-              defaultValue={task.description}
+              placeholder="Your task's description"
               required
             ></textarea>
           </div>
@@ -63,15 +52,12 @@ export default async function Page({ params }: { params: { id: string } }) {
                 name="status"
                 id="status"
                 className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
+                defaultValue="false"
                 required
               >
                 <option disabled>Choose a status</option>
-                <option value="false" defaultChecked={!task.completed}>
-                  Pending
-                </option>
-                <option value="true" defaultChecked={task.completed}>
-                  Completed
-                </option>
+                <option value="false">Pending</option>
+                <option value="true">Completed</option>
               </select>
             </div>
 
@@ -87,7 +73,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 name="due_date"
                 id="due_date"
                 className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
-                defaultValue={task.due_date}
+                defaultValue={new Date().toISOString().split('T')[0]}
                 type="date"
                 required
               />
@@ -104,7 +90,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               className="inline-block px-12 py-3 text-sm font-medium text-white transition-all bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-800 focus:outline-none focus:ring active:text-indigo-500 text-nowrap"
               type="submit"
             >
-              Edit Task
+              Create Task
             </button>
           </div>
         </form>

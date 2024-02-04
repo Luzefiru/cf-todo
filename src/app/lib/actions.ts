@@ -1,5 +1,16 @@
 'use server';
 
+export async function createTask(formData: FormData) {
+  const rawFormData = Object.fromEntries(formData.entries());
+  const newTaskData = {
+    title: rawFormData.title,
+    description: rawFormData.description,
+    status: rawFormData.status === 'true',
+    due_date: rawFormData.due_date,
+  };
+  console.log('Handling task creation with payload:', newTaskData);
+}
+
 export async function updateTask(id: number, formData: FormData) {
   const rawFormData = Object.fromEntries(formData.entries());
   const newTaskData = {
