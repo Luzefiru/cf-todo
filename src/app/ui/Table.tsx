@@ -1,8 +1,19 @@
 import TableRow from './TableRow';
+import { createClient } from '@/app/lib/supabase';
+import { cookies } from 'next/headers';
 
 export default async function Table() {
-  const response = await fetch('http://localhost:3000/api/tasks');
-  const tasks: Task[] = await response.json();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data: tasks } = await supabase.from('tasks').select();
+
+  if (tasks === null || tasks?.length === 0) {
+    return (
+      <div className="w-full overflow-x-auto rounded-lg">
+        No tasks yet. Create one first!
+      </div>
+    );
+  }
 
   return (
     <>

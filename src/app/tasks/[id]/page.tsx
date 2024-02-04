@@ -1,22 +1,14 @@
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { updateTask } from '@/app/lib/actions';
+import { fetchTaskById, updateTask } from '@/app/lib/actions';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const response = await fetch(`http://localhost:3000/api/tasks/${params.id}`, {
-    cache: 'no-store',
-  });
+  const task = await fetchTaskById(Number(params.id));
 
-  if (response.status === 404) {
-    notFound();
-  }
-
-  const { task }: { task: Task } = await response.json();
   const updateTaskWithId = updateTask.bind(null, Number(task.id));
 
   return (
     <div className="flex justify-center w-full">
-      <div className="flex justify-center w-full px-2 sm:px-4 md:w-3/4">
+      <div className="flex justify-center w-full px-2 smssssssssssss:px-4 md:w-3/4">
         <form action={updateTaskWithId} className="w-full lg:w-3/4">
           <label
             htmlFor="title"
