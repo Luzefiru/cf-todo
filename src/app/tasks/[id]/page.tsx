@@ -48,7 +48,10 @@ export default function Page({ params }: { params: { id: string } }) {
       due_date: formData.due_date,
     };
 
-    const { error } = await supabase.from('tasks').insert([newTaskData]);
+    const { error } = await supabase
+      .from('tasks')
+      .update([newTaskData])
+      .eq('id', params.id);
 
     if (error) {
       console.error('Error creating task:', error.message);
@@ -166,7 +169,7 @@ export default function Page({ params }: { params: { id: string } }) {
               className="inline-block px-12 py-3 text-sm font-medium text-white transition-all bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-800 focus:outline-none focus:ring active:text-indigo-500 text-nowrap"
               type="submit"
             >
-              Create Task
+              Update Task
             </button>
           </div>
         </form>
