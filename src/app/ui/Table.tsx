@@ -1,7 +1,8 @@
 import TableRow from './TableRow';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default async function Table() {
-  console.log('fetching', `${process.env.NEXT_PUBLIC_TASKS_API_BASE_URL}`);
+  noStore(); // I opt-out of caching for new dynamic data on page navigation
   const response = await fetch(`${process.env.NEXT_PUBLIC_TASKS_API_BASE_URL}`);
 
   const tasks: Task[] = await response.json();
