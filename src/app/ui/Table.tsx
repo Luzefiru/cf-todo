@@ -1,13 +1,26 @@
+'use client';
+
 import TableRow from './TableRow';
-import { createClient } from '@/app/lib/supabase';
-import { cookies } from 'next/headers';
+import { newBrowserClient } from '@/app/lib/supabase';
+import { useState, useEffect } from 'react';
 
-export default async function Table() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const { data: tasks } = await supabase.from('tasks').select();
+export default function Table() {
+  const [tasks, setTasks] = useState<Task[] | null>(null);
 
-  if (tasks === null || tasks?.length === 0) {
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const supabase = newBrowserClient();
+      const { data: tasks } = await supabase.from('tasks').select();
+      setTasks(tasks as Task[]);
+    };
+    fetchTasks();
+  }, []);
+
+  if (tasks === null) {
+    return <div>Loading...</div>;
+  }
+
+  if (tasks?.length === 0) {
     return (
       <div className="w-full overflow-x-auto rounded-lg">
         No tasks yet. Create one first!
