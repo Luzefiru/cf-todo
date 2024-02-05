@@ -1,4 +1,8 @@
+import Loading from './loading';
 import Table from './ui/Table';
+import { Suspense } from 'react';
+
+export const runtime = 'edge';
 
 export default function Home() {
   return (
@@ -6,7 +10,9 @@ export default function Home() {
       <h3 className="mb-8 text-2xl font-bold text-gray-900 sm:text-3xl">
         Task List
       </h3>
-      <Table />
+      <Suspense fallback={<Loading />}>
+        <Table />
+      </Suspense>
     </div>
   );
 }

@@ -1,13 +1,11 @@
 import TableRow from './TableRow';
-import { createClient } from '@/app/lib/supabase';
-import { cookies } from 'next/headers';
 
 export default async function Table() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const { data: tasks } = await supabase.from('tasks').select();
+  const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/tasks');
 
-  if (tasks === null || tasks?.length === 0) {
+  const tasks: Task[] = await response.json();
+
+  if (tasks?.length === 0) {
     return (
       <div className="w-full overflow-x-auto rounded-lg">
         No tasks yet. Create one first!

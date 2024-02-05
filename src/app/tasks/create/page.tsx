@@ -1,11 +1,64 @@
-import Link from 'next/link';
-import { createTask } from '@/app/lib/actions';
+'use client';
 
-export default async function Page() {
+import Link from 'next/link';
+import { newBrowserClient } from '@/app/lib/supabase';
+import { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function Page() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    status: 'true',
+    due_date: new Date().toISOString().split('T')[0],
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const submitForm = async () => {
+      const supabase = newBrowserClient();
+      const newTaskData = {
+        title: formData.title,
+        description: formData.description,
+        completed: formData.status === 'true',
+        due_date: formData.due_date,
+      };
+
+      const { error } = await supabase.from('tasks').insert(newTaskData);
+
+      if (error) {
+        console.error('Error creating task:', error.message);
+        throw error;
+      }
+
+      router.push('/');
+    };
+    submitForm();
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { target } = e;
+    const { name, value } = target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="flex justify-center w-full">
       <div className="flex justify-center w-full px-2 sm:px-4 md:w-3/4">
-        <form action={createTask} className="w-full lg:w-3/4">
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="w-full lg:w-3/4"
+        >
           <label
             htmlFor="title"
             className="block p-2 text-sm font-medium text-gray-700"
@@ -18,6 +71,7 @@ export default async function Page() {
             className="w-full p-2 mb-4 text-2xl font-bold text-gray-900 border border-gray-200 rounded-lg shadow-sm sm:text-3xl"
             placeholder="An interesting task title"
             required
+            onChange={handleInputChange}
           />
 
           <div className="mb-4">
@@ -35,6 +89,7 @@ export default async function Page() {
               rows={4}
               placeholder="Your task's description"
               required
+              onChange={handleInputChange}
             ></textarea>
           </div>
 
@@ -53,6 +108,7 @@ export default async function Page() {
                 className="w-full p-2 align-top border border-gray-200 rounded-lg shadow-sm sm:text-sm"
                 defaultValue="false"
                 required
+                onChange={handleInputChange}
               >
                 <option disabled>Choose a status</option>
                 <option value="false">Pending</option>
@@ -75,6 +131,7 @@ export default async function Page() {
                 defaultValue={new Date().toISOString().split('T')[0]}
                 type="date"
                 required
+                onChange={handleInputChange}
               />
             </div>
           </div>

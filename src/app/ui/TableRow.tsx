@@ -1,4 +1,5 @@
 import TableRowButtons from './TableRowButtons';
+import { Success, Error } from './badges';
 
 export default function TableRow({
   id,
@@ -16,7 +17,7 @@ export default function TableRow({
         {description}
       </td>
       <td className="px-4 py-2 text-center text-gray-700 whitespace-nowrap">
-        {completed ? 'Completed' : 'Pending'}
+        {completed ? <Success text="Completed" /> : <Error text="Pending" />}
       </td>
       <td className="px-4 py-2 text-center text-gray-700 whitespace-nowrap">
         {new Date(due_date).toISOString().split('T')[0].replaceAll('-', '/')}
