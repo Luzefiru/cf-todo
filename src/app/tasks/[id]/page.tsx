@@ -16,7 +16,6 @@ export default function Page({ params }: { params: { id: string } }) {
     status: 'false',
     due_date: new Date().toISOString().split('T')[0],
   });
-  console.log(formData);
 
   useEffect(() => {
     const supabase = newBrowserClient();
@@ -44,7 +43,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const newTaskData = {
       title: formData.title,
       description: formData.description,
-      completed: formData.status === 'true',
+      completed: formData.status,
       due_date: formData.due_date,
     };
 
@@ -59,6 +58,7 @@ export default function Page({ params }: { params: { id: string } }) {
     }
 
     router.push('/');
+    router.refresh();
   };
 
   const handleInputChange = (

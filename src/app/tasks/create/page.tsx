@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { newBrowserClient } from '@/app/lib/supabase';
 import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export default function Page() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    status: 'true',
+    status: 'false',
     due_date: new Date().toISOString().split('T')[0],
   });
 
@@ -34,6 +35,7 @@ export default function Page() {
       }
 
       router.push('/');
+      router.refresh();
     };
     submitForm();
   };
@@ -111,8 +113,12 @@ export default function Page() {
                 onChange={handleInputChange}
               >
                 <option disabled>Choose a status</option>
-                <option value="false">Pending</option>
-                <option value="true">Completed</option>
+                <option value="false" selected={formData.status === 'false'}>
+                  Pending
+                </option>
+                <option value="true" selected={formData.status === 'true'}>
+                  Completed
+                </option>
               </select>
             </div>
 

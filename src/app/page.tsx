@@ -4,6 +4,9 @@ import { Suspense } from 'react';
 
 export const runtime = 'edge';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function Home() {
   return (
     <div className="w-full px-4 mx-auto sm:px-6 lg:px-16">
