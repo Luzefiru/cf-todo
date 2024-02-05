@@ -4,22 +4,6 @@ import { createClient } from '@/app/lib/supabase';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function fetchTaskById(id: number) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const { data: task, error } = await supabase
-    .from('tasks')
-    .select()
-    .eq('id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return task[0];
-}
-
 export async function createTask(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);

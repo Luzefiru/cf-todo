@@ -5,6 +5,8 @@ export const metadata: Metadata = {
   title: 'Page Not Found',
 };
 
+export const runtime = 'edge';
+
 export default function NotFound() {
   return (
     <>

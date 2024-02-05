@@ -1,8 +1,24 @@
 import Link from 'next/link';
-import { fetchTaskById, updateTask } from '@/app/lib/actions';
+import { updateTask } from '@/app/lib/actions';
+import { cookies } from 'next/headers';
+import { createClient } from '@/app/lib/supabase';
+
+export const runtime = 'edge';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const task = await fetchTaskById(Number(params.id));
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .select()
+    .eq('id', params.id);
+
+  if (error) {
+    throw error;
+  }
+
+  const task = data[0];
 
   const updateTaskWithId = updateTask.bind(null, Number(task.id));
 
