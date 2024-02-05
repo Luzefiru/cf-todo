@@ -1,7 +1,8 @@
 import TableRow from './TableRow';
 
 export default async function Table() {
-  const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/tasks');
+  console.log('fetching', `${process.env.NEXT_PUBLIC_TASKS_API_BASE_URL}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TASKS_API_BASE_URL}`);
 
   const tasks: Task[] = await response.json();
 
