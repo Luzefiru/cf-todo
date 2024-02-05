@@ -1,24 +1,9 @@
-'use client';
-
 import TableRow from './TableRow';
-import { newBrowserClient } from '@/app/lib/supabase';
-import { useState, useEffect } from 'react';
 
-export default function Table() {
-  const [tasks, setTasks] = useState<Task[] | null>(null);
+export default async function Table() {
+  const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/tasks');
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const supabase = newBrowserClient();
-      const { data: tasks } = await supabase.from('tasks').select();
-      setTasks(tasks as Task[]);
-    };
-    fetchTasks();
-  }, []);
-
-  if (tasks === null) {
-    return <div>Loading...</div>;
-  }
+  const tasks: Task[] = await response.json();
 
   if (tasks?.length === 0) {
     return (
